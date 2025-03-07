@@ -1,0 +1,2366 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>An overview of pQTLdata</title>
+
+<script src="pQTLdata_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="pQTLdata_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="pQTLdata_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="pQTLdata_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="pQTLdata_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="pQTLdata_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="pQTLdata_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="pQTLdata_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="pQTLdata_files/navigation-1.1/tabsets.js"></script>
+<link href="pQTLdata_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="pQTLdata_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">An overview of pQTLdata</h1>
+
+</div>
+
+
+<p>This package intends to gather information, meta-data and relevant scripts in proteogenomic analysis.</p>
+<div id="collections" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Collections</h1>
+<p>As used in several years of proteomic analysis and for future extensions, the collections are in two locations:</p>
+<ul>
+<li><strong><code>data/</code></strong>. R datasets.</li>
+<li><strong><code>inst/</code></strong>. <code>EndNote/</code>, <code>Olink/</code>, <code>scripts/</code>, which spread into the package’s root directory after installation.</li>
+</ul>
+<p>While <code>library(help=pQTLdata)</code> displays the general information, <code>? pQTLdata</code> can give a list of data objects in the package.</p>
+</div>
+<div id="protein-panels" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Protein panels</h1>
+<div id="caprion" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Caprion</h2>
+<p>As has been the norm, no snapshot upon data release was provided which consequently requires substantial effort and the notable ones are highlighted here.</p>
+<table>
+<caption><span id="tab:caprion">Table 2.1: </span>Updated information on Caprion</caption>
+<colgroup>
+<col width="2%" />
+<col width="31%" />
+<col width="2%" />
+<col width="2%" />
+<col width="54%" />
+<col width="2%" />
+<col width="2%" />
+<col width="2%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Gene</th>
+<th align="left">Gene.orig</th>
+<th align="left">Protein</th>
+<th align="left">Accession</th>
+<th align="left">ensGenes</th>
+<th align="left">chr</th>
+<th align="right">start</th>
+<th align="right">end</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AMY1</td>
+<td align="left">AMY1A; AMY1B; AMY1C</td>
+<td align="left">AMY1_HUMAN</td>
+<td align="left">P04745</td>
+<td align="left">ENSG00000174876, ENSG00000187733, ENSG00000237763</td>
+<td align="left">1</td>
+<td align="right">103655760</td>
+<td align="right">103758726</td>
+</tr>
+<tr class="even">
+<td align="left">C20orf27</td>
+<td align="left">C20orf27</td>
+<td align="left">CT027_HUMAN</td>
+<td align="left">Q9GZN8</td>
+<td align="left">ENSG00000101220</td>
+<td align="left">20</td>
+<td align="right">3753508</td>
+<td align="right">3767781</td>
+</tr>
+<tr class="odd">
+<td align="left">C4B</td>
+<td align="left">C4B; C4B_2</td>
+<td align="left">CO4B_HUMAN</td>
+<td align="left">P0C0L5</td>
+<td align="left">ENSG00000224389, ENSG00000236625, ENSG00000228267, ENSG00000233312, ENSG00000228454</td>
+<td align="left">6</td>
+<td align="right">3262537</td>
+<td align="right">32035418</td>
+</tr>
+<tr class="even">
+<td align="left">C7orf26</td>
+<td align="left">C7orf26</td>
+<td align="left">CG026_HUMAN</td>
+<td align="left">Q96N11</td>
+<td align="left">ENSG00000146576</td>
+<td align="left">7</td>
+<td align="right">6590021</td>
+<td align="right">6608726</td>
+</tr>
+<tr class="odd">
+<td align="left">CD97</td>
+<td align="left">CD97</td>
+<td align="left">CD97_HUMAN</td>
+<td align="left">P48960</td>
+<td align="left">ENSG00000123146</td>
+<td align="left">19</td>
+<td align="right">14380501</td>
+<td align="right">14408725</td>
+</tr>
+<tr class="even">
+<td align="left">FAM49B</td>
+<td align="left">FAM49B</td>
+<td align="left">FA49B_HUMAN</td>
+<td align="left">Q9NUQ9</td>
+<td align="left">ENSG00000153310</td>
+<td align="left">8</td>
+<td align="right">129839593</td>
+<td align="right">130017504</td>
+</tr>
+<tr class="odd">
+<td align="left">GBA</td>
+<td align="left">GBA</td>
+<td align="left">GLCM_HUMAN</td>
+<td align="left">P04062</td>
+<td align="left">ENSG00000177628</td>
+<td align="left">1</td>
+<td align="right">155234452</td>
+<td align="right">155244699</td>
+</tr>
+<tr class="even">
+<td align="left">HBA</td>
+<td align="left">HBA1; HBA2</td>
+<td align="left">HBA_HUMAN</td>
+<td align="left">P69905</td>
+<td align="left">ENSG00000188536, ENSG00000206172</td>
+<td align="left">16</td>
+<td align="right">172876</td>
+<td align="right">177522</td>
+</tr>
+<tr class="odd">
+<td align="left">HIST</td>
+<td align="left">HIST1H4A; HIST1H4B; HIST1H4C; HIST1H4D; HIST1H4E; HIST1H4F; HIST1H4H; HIST1H4I; HIST1H4J; HIST1H4K; HIST1H4L; HIST2H4A; HIST2H4B; HIST4H4</td>
+<td align="left">H4_HUMAN</td>
+<td align="left">P62805</td>
+<td align="left">ENSG00000277157, ENSG00000275126, ENSG00000274618, ENSG00000197061, ENSG00000158406, ENSG00000197238, ENSG00000276966, ENSG00000197837, ENSG00000276180, ENSG00000278705, ENSG00000273542, ENSG00000278637, ENSG00000270276, ENSG00000270882</td>
+<td align="left">6, 12, 1</td>
+<td align="right">14767999</td>
+<td align="right">149861159</td>
+</tr>
+<tr class="even">
+<td align="left">SLC9A3R1</td>
+<td align="left">SLC9A3R1</td>
+<td align="left">NHRF1_HUMAN</td>
+<td align="left">O14745</td>
+<td align="left">ENSG00000109062</td>
+<td align="left">17</td>
+<td align="right">74748628</td>
+<td align="right">74769353</td>
+</tr>
+<tr class="odd">
+<td align="left">WARS</td>
+<td align="left">WARS</td>
+<td align="left">SYWC_HUMAN</td>
+<td align="left">P23381</td>
+<td align="left">ENSG00000140105</td>
+<td align="left">14</td>
+<td align="right">100333790</td>
+<td align="right">100376805</td>
+</tr>
+<tr class="even">
+<td align="left">YARS</td>
+<td align="left">YARS</td>
+<td align="left">SYYC_HUMAN</td>
+<td align="left">P54577</td>
+<td align="left">ENSG00000134684</td>
+<td align="left">1</td>
+<td align="right">32775237</td>
+<td align="right">32818031</td>
+</tr>
+</tbody>
+</table>
+<p>which again is useful for extracting data from GTEx v8.</p>
+</div>
+<div id="olink" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Olink</h2>
+<p>This includes 12 qPCR panels, 15 Target 96 panels and Explore panels.</p>
+</div>
+<div id="somascan" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> SomaScan</h2>
+<p>Both <code>SomaScanV4.1</code> and the latest <code>SomaScan11k</code> are directly from SomaLogic.</p>
+</div>
+<div id="swath-ms" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> SWATH-MS</h2>
+<p>This panel has been used in an experimental data acquisition and analysis.</p>
+</div>
+<div id="overlap-of-proteins" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Overlap of proteins</h2>
+<p>It is of interest to compare some of these,</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:overlap1"></span>
+<img src="pQTLdata/overlap1-1.png" alt="Overlap of Olink Explore HT, SomaScan V4.1 and Caprion" width="864" style="display:block; margin: auto" />
+<p class="caption">
+Figure 2.1: Overlap of Olink Explore HT, SomaScan V4.1 and Caprion
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:overlap2"></span>
+<img src="pQTLdata/overlap2-1.png" alt="Overlap of Olink Explore HT, SomaScan 11K and Caprion" width="864" style="display:block; margin: auto" />
+<p class="caption">
+Figure 2.2: Overlap of Olink Explore HT, SomaScan 11K and Caprion
+</p>
+</div>
+</div>
+</div>
+<div id="published-data" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Published data</h1>
+<p>This associates with several panels, including SomaScan (<code>SomaScan160410</code>)<span class="citation"><sup>1</sup></span>, Olink qPCR inflammation
+(<code>inf1</code>)<span class="citation"><sup>2</sup></span> and Seer (<code>seer1980</code>)<span class="citation"><sup>3</sup></span>. In particular, <code>inf1</code> contains updates from the original release by Olink.</p>
+<table>
+<caption><span id="tab:inf1">Table 3.1: </span>Olink/inflammation panel</caption>
+<colgroup>
+<col width="4%" />
+<col width="6%" />
+<col width="3%" />
+<col width="35%" />
+<col width="6%" />
+<col width="1%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+<col width="7%" />
+<col width="5%" />
+<col width="4%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">gene</th>
+<th align="left">prot</th>
+<th align="left">uniprot</th>
+<th align="left">target</th>
+<th align="left">target.short</th>
+<th align="right">chr</th>
+<th align="right">start</th>
+<th align="right">end</th>
+<th align="left">ensembl_gene_id</th>
+<th align="left">alt_name</th>
+<th align="left">ensGene</th>
+<th align="right">chromosome</th>
+<th align="right">start38</th>
+<th align="right">end38</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ADA</td>
+<td align="left">ADA</td>
+<td align="left">P00813</td>
+<td align="left">Adenosine Deaminase (ADA)</td>
+<td align="left">ADA</td>
+<td align="right">20</td>
+<td align="right">43248163</td>
+<td align="right">43280874</td>
+<td align="left">ENSG00000196839</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">ARTN</td>
+<td align="left">ARTN</td>
+<td align="left">Q5T4W7</td>
+<td align="left">Artemin (ARTN)</td>
+<td align="left">ARTN</td>
+<td align="right">1</td>
+<td align="right">44398992</td>
+<td align="right">44402913</td>
+<td align="left">ENSG00000117407</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">AXIN1</td>
+<td align="left">AXIN1</td>
+<td align="left">O15169</td>
+<td align="left">Axin-1 (AXIN1)</td>
+<td align="left">AXIN1</td>
+<td align="right">16</td>
+<td align="right">337440</td>
+<td align="right">402673</td>
+<td align="left">ENSG00000103126</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">BDNF</td>
+<td align="left">BDNF</td>
+<td align="left">P23560</td>
+<td align="left">Brain-derived neutrophic factor (BDNF)</td>
+<td align="left">BDNF</td>
+<td align="right">11</td>
+<td align="right">27676440</td>
+<td align="right">27743605</td>
+<td align="left">ENSG00000176697</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CASP8</td>
+<td align="left">CASP.8</td>
+<td align="left">Q14790</td>
+<td align="left">Caspase 8 (CASP-8)</td>
+<td align="left">CASP-8</td>
+<td align="right">2</td>
+<td align="right">202098166</td>
+<td align="right">202152434</td>
+<td align="left">ENSG00000064012</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CCL11</td>
+<td align="left">CCL11</td>
+<td align="left">P51671</td>
+<td align="left">Eotaxin-1 (CCL11)</td>
+<td align="left">CCL11</td>
+<td align="right">17</td>
+<td align="right">32612687</td>
+<td align="right">32615353</td>
+<td align="left">ENSG00000172156</td>
+<td align="left">CCL11</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL13</td>
+<td align="left">MCP.4</td>
+<td align="left">Q99616</td>
+<td align="left">Monocyte chemotactic protein 4 (MCP-4)</td>
+<td align="left">MCP-4</td>
+<td align="right">17</td>
+<td align="right">32683471</td>
+<td align="right">32685629</td>
+<td align="left">ENSG00000181374</td>
+<td align="left">CCL13</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CCL19</td>
+<td align="left">CCL19</td>
+<td align="left">Q99731</td>
+<td align="left">C-C motif chemokine 19 (CCL19)</td>
+<td align="left">CCL19</td>
+<td align="right">9</td>
+<td align="right">34689564</td>
+<td align="right">34691274</td>
+<td align="left">ENSG00000172724</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL2</td>
+<td align="left">MCP.1</td>
+<td align="left">P13500</td>
+<td align="left">Monocyte chemotactic protein 1 (MCP-1)</td>
+<td align="left">MCP-1</td>
+<td align="right">17</td>
+<td align="right">32582304</td>
+<td align="right">32584222</td>
+<td align="left">ENSG00000108691</td>
+<td align="left">CCL2</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CCL20</td>
+<td align="left">CCL20</td>
+<td align="left">P78556</td>
+<td align="left">C-C motif chemokine 20 (CCL20)</td>
+<td align="left">CCL20</td>
+<td align="right">2</td>
+<td align="right">228678558</td>
+<td align="right">228682272</td>
+<td align="left">ENSG00000115009</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL23</td>
+<td align="left">CCL23</td>
+<td align="left">P55773</td>
+<td align="left">C-C motif chemokine 23 (CCL23)</td>
+<td align="left">CCL23</td>
+<td align="right">17</td>
+<td align="right">34340096</td>
+<td align="right">34345005</td>
+<td align="left">ENSG00000167236</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000274736</td>
+<td align="right">17</td>
+<td align="right">36013056</td>
+<td align="right">36017972</td>
+</tr>
+<tr class="even">
+<td align="left">CCL25</td>
+<td align="left">CCL25</td>
+<td align="left">O15444</td>
+<td align="left">C-C motif chemokine 25 (CCL25)</td>
+<td align="left">CCL25</td>
+<td align="right">19</td>
+<td align="right">8117651</td>
+<td align="right">8127534</td>
+<td align="left">ENSG00000131142</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000131142</td>
+<td align="right">19</td>
+<td align="right">8052318</td>
+<td align="right">8062660</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL28</td>
+<td align="left">CCL28</td>
+<td align="left">Q9NRJ3</td>
+<td align="left">C-C motif chemokine 28 (CCL28)</td>
+<td align="left">CCL28</td>
+<td align="right">5</td>
+<td align="right">43376747</td>
+<td align="right">43412493</td>
+<td align="left">ENSG00000151882</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CCL3</td>
+<td align="left">MIP.1.alpha</td>
+<td align="left">P10147</td>
+<td align="left">Macrophage inflammatory protein 1-alpha (MIP-1 alpha)</td>
+<td align="left">MIP-1 alpha</td>
+<td align="right">17</td>
+<td align="right">34415602</td>
+<td align="right">34417515</td>
+<td align="left">ENSG00000006075</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000277632</td>
+<td align="right">17</td>
+<td align="right">36088256</td>
+<td align="right">36090169</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL4</td>
+<td align="left">CCL4</td>
+<td align="left">P13236</td>
+<td align="left">C-C motif chemokine 4 (CCL4)</td>
+<td align="left">CCL4</td>
+<td align="right">17</td>
+<td align="right">34430983</td>
+<td align="right">34433014</td>
+<td align="left">ENSG00000129277</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000275302</td>
+<td align="right">17</td>
+<td align="right">36103827</td>
+<td align="right">36105621</td>
+</tr>
+<tr class="even">
+<td align="left">CCL7</td>
+<td align="left">MCP.3</td>
+<td align="left">P80098</td>
+<td align="left">Monocyte chemotactic protein 3 (MCP-3)</td>
+<td align="left">MCP-3</td>
+<td align="right">17</td>
+<td align="right">32597240</td>
+<td align="right">32599261</td>
+<td align="left">ENSG00000108688</td>
+<td align="left">CCL7</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CCL8</td>
+<td align="left">MCP.2</td>
+<td align="left">P80075</td>
+<td align="left">Monocyte chemotactic protein 2 (MCP-2)</td>
+<td align="left">MCP-2</td>
+<td align="right">17</td>
+<td align="right">32646055</td>
+<td align="right">32648421</td>
+<td align="left">ENSG00000108700</td>
+<td align="left">CCL8</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CD244</td>
+<td align="left">CD244</td>
+<td align="left">Q9BZW8</td>
+<td align="left">Natural killer cell receptor 2B4 (CD244)</td>
+<td align="left">CD244</td>
+<td align="right">1</td>
+<td align="right">160799950</td>
+<td align="right">160832692</td>
+<td align="left">ENSG00000122223</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CD274</td>
+<td align="left">PD.L1</td>
+<td align="left">Q9NZQ7</td>
+<td align="left">Programmed cell death 1 ligand 1 (PD-L1)</td>
+<td align="left">PD-L1</td>
+<td align="right">9</td>
+<td align="right">5450503</td>
+<td align="right">5470566</td>
+<td align="left">ENSG00000120217</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CD40</td>
+<td align="left">CD40</td>
+<td align="left">P25942</td>
+<td align="left">CD40L receptor (CD40)</td>
+<td align="left">CD40</td>
+<td align="right">20</td>
+<td align="right">44746911</td>
+<td align="right">44758502</td>
+<td align="left">ENSG00000101017</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CD5</td>
+<td align="left">CD5</td>
+<td align="left">P06127</td>
+<td align="left">T-cell surface glycoprotein CD5 (CD5)</td>
+<td align="left">CD5</td>
+<td align="right">11</td>
+<td align="right">60869867</td>
+<td align="right">60895324</td>
+<td align="left">ENSG00000110448</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CD6</td>
+<td align="left">CD6</td>
+<td align="left">P30203</td>
+<td align="left">T-cell surface glycoprotein CD6 isoform (CD6)</td>
+<td align="left">CD6</td>
+<td align="right">11</td>
+<td align="right">60739115</td>
+<td align="right">60787849</td>
+<td align="left">ENSG00000138675</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000013725</td>
+<td align="right">11</td>
+<td align="right">60971680</td>
+<td align="right">61020377</td>
+</tr>
+<tr class="odd">
+<td align="left">CDCP1</td>
+<td align="left">CDCP1</td>
+<td align="left">Q9H5V8</td>
+<td align="left">CUB domain-containing protein 1 (CDCP1)</td>
+<td align="left">CDCP1</td>
+<td align="right">3</td>
+<td align="right">45123770</td>
+<td align="right">45187914</td>
+<td align="left">ENSG00000163814</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CSF1</td>
+<td align="left">CSF.1</td>
+<td align="left">P09603</td>
+<td align="left">Macrophage colony-stimulating factor 1 (CSF-1)</td>
+<td align="left">CSF-1</td>
+<td align="right">1</td>
+<td align="right">110452864</td>
+<td align="right">110473614</td>
+<td align="left">ENSG00000184371</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CST5</td>
+<td align="left">CST5</td>
+<td align="left">P28325</td>
+<td align="left">Cystatin D (CST5)</td>
+<td align="left">CST5</td>
+<td align="right">20</td>
+<td align="right">23856572</td>
+<td align="right">23860387</td>
+<td align="left">ENSG00000170367</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CX3CL1</td>
+<td align="left">CX3CL1</td>
+<td align="left">P78423</td>
+<td align="left">Fractalkine (CX3CL1)</td>
+<td align="left">CX3CL1</td>
+<td align="right">16</td>
+<td align="right">57406370</td>
+<td align="right">57418960</td>
+<td align="left">ENSG00000006210</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CXCL1</td>
+<td align="left">CXCL1</td>
+<td align="left">P09341</td>
+<td align="left">C-X-C motif chemokine 1 (CXCL1)</td>
+<td align="left">CXCL1</td>
+<td align="right">4</td>
+<td align="right">74735110</td>
+<td align="right">74736959</td>
+<td align="left">ENSG00000163739</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CXCL10</td>
+<td align="left">CXCL10</td>
+<td align="left">P02778</td>
+<td align="left">C-X-C motif chemokine 10 (CXCL10)</td>
+<td align="left">CXCL10</td>
+<td align="right">4</td>
+<td align="right">76942273</td>
+<td align="right">76944650</td>
+<td align="left">ENSG00000169245</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CXCL11</td>
+<td align="left">CXCL11</td>
+<td align="left">O14625</td>
+<td align="left">C-X-C motif chemokine 11 (CXCL11)</td>
+<td align="left">CXCL11</td>
+<td align="right">4</td>
+<td align="right">76954835</td>
+<td align="right">76962568</td>
+<td align="left">ENSG00000169248</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CXCL5</td>
+<td align="left">CXCL5</td>
+<td align="left">P42830</td>
+<td align="left">C-X-C motif chemokine 5 (CXCL5)</td>
+<td align="left">CXCL5</td>
+<td align="right">4</td>
+<td align="right">74861359</td>
+<td align="right">74864496</td>
+<td align="left">ENSG00000163735</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">CXCL6</td>
+<td align="left">CXCL6</td>
+<td align="left">P80162</td>
+<td align="left">C-X-C motif chemokine 6 (CXCL6)</td>
+<td align="left">CXCL6</td>
+<td align="right">4</td>
+<td align="right">74702214</td>
+<td align="right">74714781</td>
+<td align="left">ENSG00000124875</td>
+<td align="left">CXCL6</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">CXCL9</td>
+<td align="left">CXCL9</td>
+<td align="left">Q07325</td>
+<td align="left">C-X-C motif chemokine 9 (CXCL9)</td>
+<td align="left">CXCL9</td>
+<td align="right">4</td>
+<td align="right">76922428</td>
+<td align="right">76928641</td>
+<td align="left">ENSG00000138755</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">DNER</td>
+<td align="left">DNER</td>
+<td align="left">Q8NFT8</td>
+<td align="left">Delta and Notch-like epidermal growth factor related receptor (DNER)</td>
+<td align="left">DNER</td>
+<td align="right">2</td>
+<td align="right">230222345</td>
+<td align="right">230579274</td>
+<td align="left">ENSG00000187957</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">EIF4EBP1</td>
+<td align="left">4E.BP1</td>
+<td align="left">Q13541</td>
+<td align="left">Eukaryotic translation initiation factor 4E-binding protein 1 (4EBP1)</td>
+<td align="left">4EBP1</td>
+<td align="right">8</td>
+<td align="right">37887859</td>
+<td align="right">37917883</td>
+<td align="left">ENSG00000187840</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">FGF19</td>
+<td align="left">FGF.19</td>
+<td align="left">O95750</td>
+<td align="left">Fibroblast growth factor 19 (FGF-19)</td>
+<td align="left">FGF-19</td>
+<td align="right">11</td>
+<td align="right">69513000</td>
+<td align="right">69519410</td>
+<td align="left">ENSG00000162344</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">FGF21</td>
+<td align="left">FGF.21</td>
+<td align="left">Q9NSA1</td>
+<td align="left">Fibroblast growth factor 21 (FGF-21)</td>
+<td align="left">FGF-21</td>
+<td align="right">19</td>
+<td align="right">49258816</td>
+<td align="right">49261587</td>
+<td align="left">ENSG00000105550</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">FGF23</td>
+<td align="left">FGF.23</td>
+<td align="left">Q9GZV9</td>
+<td align="left">Fibroblast growth factor 23 (FGF-23)</td>
+<td align="left">FGF-23</td>
+<td align="right">12</td>
+<td align="right">4477393</td>
+<td align="right">4488894</td>
+<td align="left">ENSG00000118972</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">FGF5</td>
+<td align="left">FGF.5</td>
+<td align="left">P12034</td>
+<td align="left">Fibroblast growth factor 5 (FGF-5)</td>
+<td align="left">FGF-5</td>
+<td align="right">4</td>
+<td align="right">81187753</td>
+<td align="right">81257834</td>
+<td align="left">ENSG00000013725</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000138675</td>
+<td align="right">4</td>
+<td align="right">80266639</td>
+<td align="right">80336680</td>
+</tr>
+<tr class="odd">
+<td align="left">FLT3LG</td>
+<td align="left">Flt3L</td>
+<td align="left">P49771</td>
+<td align="left">Fms-related tyrosine kinase 3 ligand (FIt3L)</td>
+<td align="left">FIt3L</td>
+<td align="right">19</td>
+<td align="right">49977464</td>
+<td align="right">49989488</td>
+<td align="left">ENSG00000090554</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">GDNF</td>
+<td align="left">GDNF</td>
+<td align="left">P39905</td>
+<td align="left">Glial cell line-derived neutrophic factor (hGDNF)</td>
+<td align="left">hGDNF</td>
+<td align="right">5</td>
+<td align="right">37812779</td>
+<td align="right">37839788</td>
+<td align="left">ENSG00000168621</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">HGF</td>
+<td align="left">HGF</td>
+<td align="left">P14210</td>
+<td align="left">Hepatocyte growth factor (HGF)</td>
+<td align="left">HGF</td>
+<td align="right">7</td>
+<td align="right">81328322</td>
+<td align="right">81399754</td>
+<td align="left">ENSG00000019991</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IFNG</td>
+<td align="left">IFN.gamma</td>
+<td align="left">P01579</td>
+<td align="left">Interferon gamma (IFN-gamma)</td>
+<td align="left">IFN-gamma</td>
+<td align="right">12</td>
+<td align="right">68548548</td>
+<td align="right">68553527</td>
+<td align="left">ENSG00000111537</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL10</td>
+<td align="left">IL.10</td>
+<td align="left">P22301</td>
+<td align="left">Interleukin-10 (IL-10)</td>
+<td align="left">IL-10</td>
+<td align="right">1</td>
+<td align="right">206940947</td>
+<td align="right">206945839</td>
+<td align="left">ENSG00000136634</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL10RA</td>
+<td align="left">IL.10RA</td>
+<td align="left">Q13651</td>
+<td align="left">Interleukin-10 receptor subunit alpha (IL-10RA)</td>
+<td align="left">IL-10RA</td>
+<td align="right">11</td>
+<td align="right">117857063</td>
+<td align="right">117872196</td>
+<td align="left">ENSG00000110324</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL10RB</td>
+<td align="left">IL.10RB</td>
+<td align="left">Q08334</td>
+<td align="left">Interleukin-10 receptor subunit beta (IL10RB)</td>
+<td align="left">IL10RB</td>
+<td align="right">21</td>
+<td align="right">34638663</td>
+<td align="right">34669539</td>
+<td align="left">ENSG00000243646</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL12B</td>
+<td align="left">IL.12B</td>
+<td align="left">P29460</td>
+<td align="left">Interleukin-12 subunit beta (IL-12B)</td>
+<td align="left">IL-12B</td>
+<td align="right">5</td>
+<td align="right">158741791</td>
+<td align="right">158757895</td>
+<td align="left">ENSG00000113302</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL13</td>
+<td align="left">IL.13</td>
+<td align="left">P35225</td>
+<td align="left">Interleukin-13 (IL-13)</td>
+<td align="left">IL-13</td>
+<td align="right">5</td>
+<td align="right">131991955</td>
+<td align="right">131996802</td>
+<td align="left">ENSG00000169194</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL15RA</td>
+<td align="left">IL.15RA</td>
+<td align="left">Q13261</td>
+<td align="left">Interleukin-15 receptor subunit alpha (IL-15RA)</td>
+<td align="left">IL-15RA</td>
+<td align="right">10</td>
+<td align="right">5990855</td>
+<td align="right">6020150</td>
+<td align="left">ENSG00000134470</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL17A</td>
+<td align="left">IL.17A</td>
+<td align="left">Q16552</td>
+<td align="left">Interleukin-17A (IL-17A)</td>
+<td align="left">IL-17A</td>
+<td align="right">6</td>
+<td align="right">52051185</td>
+<td align="right">52055436</td>
+<td align="left">ENSG00000112115</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL17C</td>
+<td align="left">IL.17C</td>
+<td align="left">Q9P0M4</td>
+<td align="left">Interleukin-17C (IL-17C)</td>
+<td align="left">IL-17C</td>
+<td align="right">16</td>
+<td align="right">88704999</td>
+<td align="right">88706881</td>
+<td align="left">ENSG00000124391</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL18</td>
+<td align="left">IL.18</td>
+<td align="left">Q14116</td>
+<td align="left">Interleukin-18 (IL-18)</td>
+<td align="left">IL-18</td>
+<td align="right">11</td>
+<td align="right">112013974</td>
+<td align="right">112034840</td>
+<td align="left">ENSG00000150782</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL18R1</td>
+<td align="left">IL.18R1</td>
+<td align="left">Q13478</td>
+<td align="left">Interleukin-18 receptor 1 (IL-18R1)</td>
+<td align="left">IL-18R1</td>
+<td align="right">2</td>
+<td align="right">102927989</td>
+<td align="right">103015218</td>
+<td align="left">ENSG00000115604</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL1A</td>
+<td align="left">IL.1.alpha</td>
+<td align="left">P01583</td>
+<td align="left">Interleukin-1 alpha (IL-1 alpha)</td>
+<td align="left">IL-1 alpha</td>
+<td align="right">2</td>
+<td align="right">113531492</td>
+<td align="right">113542167</td>
+<td align="left">ENSG00000115008</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL2</td>
+<td align="left">IL.2</td>
+<td align="left">P60568</td>
+<td align="left">Interleukin-2 (IL-2)</td>
+<td align="left">IL-2</td>
+<td align="right">4</td>
+<td align="right">123372625</td>
+<td align="right">123377880</td>
+<td align="left">ENSG00000109471</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL20</td>
+<td align="left">IL.20</td>
+<td align="left">Q9NYY1</td>
+<td align="left">Interleukin-20 (IL-20)</td>
+<td align="left">IL-20</td>
+<td align="right">1</td>
+<td align="right">207038699</td>
+<td align="right">207042568</td>
+<td align="left">ENSG00000162891</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL20RA</td>
+<td align="left">IL.20RA</td>
+<td align="left">Q9UHF4</td>
+<td align="left">Interleukin-20 receptor subunit alpha (IL-20RA)</td>
+<td align="left">IL-20RA</td>
+<td align="right">6</td>
+<td align="right">137321108</td>
+<td align="right">137366298</td>
+<td align="left">ENSG00000016402</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL22RA1</td>
+<td align="left">IL.22.RA1</td>
+<td align="left">Q8N6P7</td>
+<td align="left">Interleukin-22 receptor subunit alpha-1 (IL-22RA1)</td>
+<td align="left">IL-22RA1</td>
+<td align="right">1</td>
+<td align="right">24446261</td>
+<td align="right">24469611</td>
+<td align="left">ENSG00000142677</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL24</td>
+<td align="left">IL.24</td>
+<td align="left">Q13007</td>
+<td align="left">Interleukin-24 (IL-24)</td>
+<td align="left">IL-24</td>
+<td align="right">1</td>
+<td align="right">207070788</td>
+<td align="right">207077484</td>
+<td align="left">ENSG00000162892</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL2RB</td>
+<td align="left">IL.2RB</td>
+<td align="left">P14784</td>
+<td align="left">Interleukin-2 receptor subunit beta (IL-2RB)</td>
+<td align="left">IL-2RB</td>
+<td align="right">22</td>
+<td align="right">37521878</td>
+<td align="right">37571094</td>
+<td align="left">ENSG00000100385</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL33</td>
+<td align="left">IL.33</td>
+<td align="left">O95760</td>
+<td align="left">Interleukin-33 (IL-33)</td>
+<td align="left">IL-33</td>
+<td align="right">9</td>
+<td align="right">6215805</td>
+<td align="right">6257983</td>
+<td align="left">ENSG00000137033</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL4</td>
+<td align="left">IL.4</td>
+<td align="left">P05112</td>
+<td align="left">Interleukin-4 (IL-4)</td>
+<td align="left">IL-4</td>
+<td align="right">5</td>
+<td align="right">132009678</td>
+<td align="right">132018368</td>
+<td align="left">ENSG00000113520</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL5</td>
+<td align="left">IL.5</td>
+<td align="left">P05113</td>
+<td align="left">Interleukin-5 (IL-5)</td>
+<td align="left">IL-5</td>
+<td align="right">5</td>
+<td align="right">131877136</td>
+<td align="right">131892530</td>
+<td align="left">ENSG00000113525</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL6</td>
+<td align="left">IL.6</td>
+<td align="left">P05231</td>
+<td align="left">Interleukin-6 (IL-6)</td>
+<td align="left">IL-6</td>
+<td align="right">7</td>
+<td align="right">22765503</td>
+<td align="right">22771621</td>
+<td align="left">ENSG00000136244</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">IL7</td>
+<td align="left">IL.7</td>
+<td align="left">P13232</td>
+<td align="left">Interleukin-7 (IL-7)</td>
+<td align="left">IL-7</td>
+<td align="right">8</td>
+<td align="right">79587978</td>
+<td align="right">79717758</td>
+<td align="left">ENSG00000104432</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">IL8</td>
+<td align="left">IL.8</td>
+<td align="left">P10145</td>
+<td align="left">Interleukin-8 (IL-8)</td>
+<td align="left">IL-8</td>
+<td align="right">4</td>
+<td align="right">74606223</td>
+<td align="right">74609433</td>
+<td align="left">ENSG00000169429</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">KITLG</td>
+<td align="left">SCF</td>
+<td align="left">P21583</td>
+<td align="left">Stem cell factor (SCF)</td>
+<td align="left">SCF</td>
+<td align="right">12</td>
+<td align="right">88886570</td>
+<td align="right">88974628</td>
+<td align="left">ENSG00000049130</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">LIF</td>
+<td align="left">LIF</td>
+<td align="left">P15018</td>
+<td align="left">Leukemia inhibitory factor (LIF)</td>
+<td align="left">LIF</td>
+<td align="right">22</td>
+<td align="right">30636436</td>
+<td align="right">30642840</td>
+<td align="left">ENSG00000128342</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">LIFR</td>
+<td align="left">LIF.R</td>
+<td align="left">P42702</td>
+<td align="left">Leukemia inhibitory factor receptor (LIF-R)</td>
+<td align="left">LIF-R</td>
+<td align="right">5</td>
+<td align="right">38475065</td>
+<td align="right">38608456</td>
+<td align="left">ENSG00000113594</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">LTA</td>
+<td align="left">TNFB</td>
+<td align="left">P01374</td>
+<td align="left">TNF-beta (TNFB)</td>
+<td align="left">TNFB</td>
+<td align="right">6</td>
+<td align="right">31539831</td>
+<td align="right">31542101</td>
+<td align="left">ENSG00000226979</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">MMP1</td>
+<td align="left">MMP.1</td>
+<td align="left">P03956</td>
+<td align="left">Matrix metalloproteinase-1 (MMP-1)</td>
+<td align="left">MMP-1</td>
+<td align="right">11</td>
+<td align="right">102660651</td>
+<td align="right">102668891</td>
+<td align="left">ENSG00000196611</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">MMP10</td>
+<td align="left">MMP.10</td>
+<td align="left">P09238</td>
+<td align="left">Matrix metalloproteinase-10 (MMP-10)</td>
+<td align="left">MMP-10</td>
+<td align="right">11</td>
+<td align="right">102641234</td>
+<td align="right">102651359</td>
+<td align="left">ENSG00000166670</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">NGF</td>
+<td align="left">Beta.NGF</td>
+<td align="left">P01138</td>
+<td align="left">Beta-nerve growth factor (Beta-NGF)</td>
+<td align="left">Beta-NGF</td>
+<td align="right">1</td>
+<td align="right">115828539</td>
+<td align="right">115880857</td>
+<td align="left">ENSG00000134259</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">NRTN</td>
+<td align="left">NRTN</td>
+<td align="left">Q99748</td>
+<td align="left">Neurturin (NRTN)</td>
+<td align="left">NRTN</td>
+<td align="right">19</td>
+<td align="right">5823813</td>
+<td align="right">5828335</td>
+<td align="left">ENSG00000171119</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">NTF3</td>
+<td align="left">NT.3</td>
+<td align="left">P20783</td>
+<td align="left">Neurotrophin-3 (NT-3)</td>
+<td align="left">NT-3</td>
+<td align="right">12</td>
+<td align="right">5541278</td>
+<td align="right">5630702</td>
+<td align="left">ENSG00000185652</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">OSM</td>
+<td align="left">OSM</td>
+<td align="left">P13725</td>
+<td align="left">Oncostatin-M (OSM)</td>
+<td align="left">OSM</td>
+<td align="right">22</td>
+<td align="right">30658818</td>
+<td align="right">30662829</td>
+<td align="left">ENSG00000099985</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">PLAU</td>
+<td align="left">uPA</td>
+<td align="left">P00749</td>
+<td align="left">Urokinase-type plasminogen activator (uPA)</td>
+<td align="left">uPA</td>
+<td align="right">10</td>
+<td align="right">75668935</td>
+<td align="right">75677255</td>
+<td align="left">ENSG00000122861</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">S100A12</td>
+<td align="left">EN.RAGE</td>
+<td align="left">P80511</td>
+<td align="left">Protein S100-A12 (EN-RAGE)</td>
+<td align="left">EN-RAGE</td>
+<td align="right">1</td>
+<td align="right">153346184</td>
+<td align="right">153348125</td>
+<td align="left">ENSG00000163221</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">SIRT2</td>
+<td align="left">SIRT2</td>
+<td align="left">Q8IXJ6</td>
+<td align="left">SIR2-like protein 2 (SIRT2)</td>
+<td align="left">SIRT2</td>
+<td align="right">19</td>
+<td align="right">39369197</td>
+<td align="right">39390502</td>
+<td align="left">ENSG00000068903</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">SLAMF1</td>
+<td align="left">SLAMF1</td>
+<td align="left">Q13291</td>
+<td align="left">Signaling lymphocytic activation molecule (SLAMF1)</td>
+<td align="left">SLAMF1</td>
+<td align="right">1</td>
+<td align="right">160577890</td>
+<td align="right">160617085</td>
+<td align="left">ENSG00000117090</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">STAMBP</td>
+<td align="left">STAMPB</td>
+<td align="left">O95630</td>
+<td align="left">STAM-binding protein (STAMPB)</td>
+<td align="left">STAMPB</td>
+<td align="right">2</td>
+<td align="right">74056086</td>
+<td align="right">74100786</td>
+<td align="left">ENSG00000124356</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">SULT1A1</td>
+<td align="left">ST1A1</td>
+<td align="left">P50225</td>
+<td align="left">Sulfotransferase 1A1 (ST1A1)</td>
+<td align="left">ST1A1</td>
+<td align="right">16</td>
+<td align="right">28616903</td>
+<td align="right">28634946</td>
+<td align="left">ENSG00000196502</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">TGFA</td>
+<td align="left">TGF.alpha</td>
+<td align="left">P01135</td>
+<td align="left">Transforming growth factor alpha (TGF-alpha)</td>
+<td align="left">TGF-alpha</td>
+<td align="right">2</td>
+<td align="right">70674412</td>
+<td align="right">70781325</td>
+<td align="left">ENSG00000163235</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">TGFB1</td>
+<td align="left">LAP.TGF.beta.1</td>
+<td align="left">P01137</td>
+<td align="left">Latency-associated peptide transforming growth factor beta 1 (LAP TGF-beta-1)</td>
+<td align="left">LAP TGF-beta-1</td>
+<td align="right">19</td>
+<td align="right">41807492</td>
+<td align="right">41859816</td>
+<td align="left">ENSG00000105329</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">TNF</td>
+<td align="left">TNF</td>
+<td align="left">P01375</td>
+<td align="left">Tumor necrosis factor (TNF)</td>
+<td align="left">TNF</td>
+<td align="right">6</td>
+<td align="right">31543344</td>
+<td align="right">31546113</td>
+<td align="left">ENSG00000232810</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">TNFRSF11B</td>
+<td align="left">OPG</td>
+<td align="left">O00300</td>
+<td align="left">Osteoprotegerin (OPG)</td>
+<td align="left">OPG</td>
+<td align="right">8</td>
+<td align="right">119935796</td>
+<td align="right">119964439</td>
+<td align="left">ENSG00000164761</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">TNFRSF9</td>
+<td align="left">TNFRSF9</td>
+<td align="left">Q07011</td>
+<td align="left">Tumor necrosis factor receptor superfamily member 9 (TNFRSF9)</td>
+<td align="left">TNFRSF9</td>
+<td align="right">1</td>
+<td align="right">7979907</td>
+<td align="right">8000926</td>
+<td align="left">ENSG00000049249</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">TNFSF10</td>
+<td align="left">TRAIL</td>
+<td align="left">P50591</td>
+<td align="left">TNF-related apoptosis ligand (TRAIL)</td>
+<td align="left">TRAIL</td>
+<td align="right">3</td>
+<td align="right">172223298</td>
+<td align="right">172241297</td>
+<td align="left">ENSG00000121858</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">TNFSF11</td>
+<td align="left">TRANCE</td>
+<td align="left">O14788</td>
+<td align="left">TNF-related activation cytokine (TRANCE)</td>
+<td align="left">TRANCE</td>
+<td align="right">13</td>
+<td align="right">43136872</td>
+<td align="right">43182149</td>
+<td align="left">ENSG00000120659</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">TNFSF12</td>
+<td align="left">TWEAK</td>
+<td align="left">O43508</td>
+<td align="left">Tumor necrosis factor (Ligand) superfamily member 12 (TWEAK)</td>
+<td align="left">TWEAK</td>
+<td align="right">17</td>
+<td align="right">7452208</td>
+<td align="right">7464925</td>
+<td align="left">ENSG00000239697</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">TNFSF14</td>
+<td align="left">TNFSF14</td>
+<td align="left">O43557</td>
+<td align="left">Tumor necrosis factor ligand superfamily member 14 (TNFSF14)</td>
+<td align="left">TNFSF14</td>
+<td align="right">19</td>
+<td align="right">6663148</td>
+<td align="right">6670599</td>
+<td align="left">ENSG00000125735</td>
+<td align="left">NA</td>
+<td align="left">ENSG00000125735</td>
+<td align="right">19</td>
+<td align="right">6661253</td>
+<td align="right">6670588</td>
+</tr>
+<tr class="odd">
+<td align="left">TSLP</td>
+<td align="left">TSLP</td>
+<td align="left">Q969D9</td>
+<td align="left">Thymic stromal lymphopoietin (TSLP)</td>
+<td align="left">TSLP</td>
+<td align="right">5</td>
+<td align="right">110405760</td>
+<td align="right">110413722</td>
+<td align="left">ENSG00000145777</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">VEGFA</td>
+<td align="left">VEGF.A</td>
+<td align="left">P15692</td>
+<td align="left">Vascular endothelial growth factor A (VEGF_A)</td>
+<td align="left">VEGF_A</td>
+<td align="right">6</td>
+<td align="right">43737921</td>
+<td align="right">43754224</td>
+<td align="left">ENSG00000112715</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="reference-data" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Reference data</h1>
+<p>We showcase <code>EnsDb.Hsapiens.v75</code> from Bioconductor.</p>
+<pre class="r"><code>ensembldb::metadata(EnsDb.Hsapiens.v75)
+#&gt;                  name                               value
+#&gt; 1             Db type                               EnsDb
+#&gt; 2     Type of Gene ID                     Ensembl Gene ID
+#&gt; 3  Supporting package                           ensembldb
+#&gt; 4       Db created by ensembldb package from Bioconductor
+#&gt; 5      script_version                               0.3.0
+#&gt; 6       Creation time            Thu May 18 09:15:45 2017
+#&gt; 7     ensembl_version                                  75
+#&gt; 8        ensembl_host                           localhost
+#&gt; 9            Organism                        homo_sapiens
+#&gt; 10        taxonomy_id                                9606
+#&gt; 11       genome_build                              GRCh37
+#&gt; 12    DBSCHEMAVERSION                                 2.0
+ensembldb::keytypes(EnsDb.Hsapiens.v75)
+#&gt;  [1] &quot;ENTREZID&quot;            &quot;EXONID&quot;              &quot;GENEBIOTYPE&quot;        
+#&gt;  [4] &quot;GENEID&quot;              &quot;GENENAME&quot;            &quot;PROTDOMID&quot;          
+#&gt;  [7] &quot;PROTEINDOMAINID&quot;     &quot;PROTEINDOMAINSOURCE&quot; &quot;PROTEINID&quot;          
+#&gt; [10] &quot;SEQNAME&quot;             &quot;SEQSTRAND&quot;           &quot;SYMBOL&quot;             
+#&gt; [13] &quot;TXBIOTYPE&quot;           &quot;TXID&quot;                &quot;TXNAME&quot;             
+#&gt; [16] &quot;UNIPROTID&quot;
+exon_info &lt;- ensembldb::exons(EnsDb.Hsapiens.v75)
+gene_info &lt;- ensembldb::genes(EnsDb.Hsapiens.v75)
+transcript_info &lt;- ensembldb::transcripts(EnsDb.Hsapiens.v75)
+colnames(S4Vectors::mcols(gene_info))
+#&gt; [1] &quot;gene_id&quot;          &quot;gene_name&quot;        &quot;gene_biotype&quot;     &quot;seq_coord_system&quot;
+#&gt; [5] &quot;symbol&quot;           &quot;entrezid&quot;
+colnames(S4Vectors::mcols(transcript_info))
+#&gt; [1] &quot;tx_id&quot;            &quot;tx_biotype&quot;       &quot;tx_cds_seq_start&quot; &quot;tx_cds_seq_end&quot;  
+#&gt; [5] &quot;gene_id&quot;          &quot;tx_name&quot;
+overlaps &lt;- IRanges::findOverlaps(transcript_info, gene_info)
+overlapping_transcripts &lt;- transcript_info[queryHits(overlaps)]
+overlapping_genes &lt;- gene_info[subjectHits(overlaps)]
+overlap_data &lt;- data.frame(
+  transcript_id = mcols(overlapping_transcripts)$tx_id,
+  gene_id = S4Vectors::mcols(overlapping_genes)$gene_id,
+  gene_name = S4Vectors::mcols(overlapping_genes)$gene_name,
+  start = pmax(start(overlapping_transcripts), start(overlapping_genes)),
+  end = pmin(end(overlapping_transcripts), end(overlapping_genes))
+)
+gene_symbols &lt;- c(&quot;BRCA1&quot;, &quot;TP53&quot;)
+gene_data &lt;- subset(overlap_data,gene_name%in%gene_symbols,select=-c(gene_id,gene_name))
+cols &lt;- c(&quot;UNIPROTID&quot;,&quot;PROTEINID&quot;,&quot;GENEID&quot;,&quot;GENENAME&quot;,&quot;SEQNAME&quot;,&quot;TXID&quot;)
+info &lt;- ensembldb::select(EnsDb.Hsapiens.v75, keys = gene_symbols, 
+                          columns = cols, keytype = &quot;SYMBOL&quot;) |&gt;
+        dplyr::left_join(head(gene_data,15),by=c(&#39;TXID&#39;=&#39;transcript_id&#39;)) |&gt;
+        subset(!is.na(UNIPROTID)&amp;!is.na(start)&amp;!is.na(end))
+knitr::kable(head(info,15),caption=&quot;Annotation for BRCA1 and TP53&quot;)</code></pre>
+<table style="width:100%;">
+<caption><span id="tab:refdata">Table 4.1: </span>Annotation for BRCA1 and TP53</caption>
+<colgroup>
+<col width="3%" />
+<col width="6%" />
+<col width="12%" />
+<col width="15%" />
+<col width="15%" />
+<col width="8%" />
+<col width="7%" />
+<col width="15%" />
+<col width="7%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">SYMBOL</th>
+<th align="left">UNIPROTID</th>
+<th align="left">PROTEINID</th>
+<th align="left">GENEID</th>
+<th align="left">GENENAME</th>
+<th align="left">SEQNAME</th>
+<th align="left">TXID</th>
+<th align="right">start</th>
+<th align="right">end</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">242</td>
+<td align="left">TP53</td>
+<td align="left">Q761V2_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">243</td>
+<td align="left">TP53</td>
+<td align="left">Q6IT77_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">244</td>
+<td align="left">TP53</td>
+<td align="left">Q1HGV1_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">245</td>
+<td align="left">TP53</td>
+<td align="left">Q0PKT5_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">246</td>
+<td align="left">TP53</td>
+<td align="left">L0ES54_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">247</td>
+<td align="left">TP53</td>
+<td align="left">G4Y083_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">248</td>
+<td align="left">TP53</td>
+<td align="left">E9PCY9_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">249</td>
+<td align="left">TP53</td>
+<td align="left">E7EQX7_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">250</td>
+<td align="left">TP53</td>
+<td align="left">E7EMR6_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">251</td>
+<td align="left">TP53</td>
+<td align="left">B5AKF6_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">252</td>
+<td align="left">TP53</td>
+<td align="left">A4GWD0_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">253</td>
+<td align="left">TP53</td>
+<td align="left">A4GWB8_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">254</td>
+<td align="left">TP53</td>
+<td align="left">A4GWB5_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="even">
+<td align="left">255</td>
+<td align="left">TP53</td>
+<td align="left">A2I9Z0_HUMAN</td>
+<td align="left">ENSP00000410739</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000413465</td>
+<td align="right">7565097</td>
+<td align="right">7579912</td>
+</tr>
+<tr class="odd">
+<td align="left">256</td>
+<td align="left">TP53</td>
+<td align="left">S5LQU8_HUMAN</td>
+<td align="left">ENSP00000352610</td>
+<td align="left">ENSG00000141510</td>
+<td align="left">TP53</td>
+<td align="left">17</td>
+<td align="left">ENST00000359597</td>
+<td align="right">7569404</td>
+<td align="right">7579912</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>keytypes(org.Hs.eg.db)
+#&gt;  [1] &quot;ACCNUM&quot;       &quot;ALIAS&quot;        &quot;ENSEMBL&quot;      &quot;ENSEMBLPROT&quot;  &quot;ENSEMBLTRANS&quot;
+#&gt;  [6] &quot;ENTREZID&quot;     &quot;ENZYME&quot;       &quot;EVIDENCE&quot;     &quot;EVIDENCEALL&quot;  &quot;GENENAME&quot;    
+#&gt; [11] &quot;GENETYPE&quot;     &quot;GO&quot;           &quot;GOALL&quot;        &quot;IPI&quot;          &quot;MAP&quot;         
+#&gt; [16] &quot;OMIM&quot;         &quot;ONTOLOGY&quot;     &quot;ONTOLOGYALL&quot;  &quot;PATH&quot;         &quot;PFAM&quot;        
+#&gt; [21] &quot;PMID&quot;         &quot;PROSITE&quot;      &quot;REFSEQ&quot;       &quot;SYMBOL&quot;       &quot;UCSCKG&quot;      
+#&gt; [26] &quot;UNIPROT&quot;
+uniprot_ids &lt;- ensembldb::select(org.Hs.eg.db, keys = gene_symbols, columns = &quot;UNIPROT&quot;, keytype = &quot;SYMBOL&quot;)
+#&gt; &#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
+<p>where <code>org.Hs.eg.db</code> is more focused on genes.</p>
+</div>
+<div id="scripts" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Scripts</h1>
+<p>An analysis involving COVID-19 data is in <code>Olink/</code> directory, while the <code>scripts/</code> directory records data generation which potentially can be extended.
+Specifically, <code>docs.sh</code> operates with GitHub while <code>cran.sh</code> builds, installs, and checks for compliance with the Comprehensive R Archive Network (CRAN).</p>
+</div>
+<div id="urls" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> URLs</h1>
+<ul>
+<li>CellCarta, <a href="https://cellcarta.com/" class="uri">https://cellcarta.com/</a></li>
+<li>EndNote, <a href="https://endnote.com/" class="uri">https://endnote.com/</a></li>
+<li>ENSEMBL BioMart, <a href="https://www.ensembl.org/index.html" class="uri">https://www.ensembl.org/index.html</a></li>
+<li>GitHub, <a href="https://github.com/" class="uri">https://github.com/</a></li>
+<li>NULISA, <a href="https://alamarbio.com/technology/nulisa-platform/" class="uri">https://alamarbio.com/technology/nulisa-platform/</a></li>
+<li>NCI Proteomic Data Commons, <a href="https://pdc.cancer.gov/pdc/browse" class="uri">https://pdc.cancer.gov/pdc/browse</a></li>
+<li>Olink, <a href="https://olink.com/" class="uri">https://olink.com/</a> (<a href="https://olink.com/publications" class="uri">https://olink.com/publications</a>)</li>
+<li>SCALLOP consortium, <a href="http://www.scallop-consortium.com/" class="uri">http://www.scallop-consortium.com/</a></li>
+<li>Seer, <a href="https://seer.bio/" class="uri">https://seer.bio/</a></li>
+<li>SomaLogic, <a href="https://somalogic.com/" class="uri">https://somalogic.com/</a></li>
+<li>SWATH-MS, <a href="https://www.creative-proteomics.com/ngpro/swath-ms.html" class="uri">https://www.creative-proteomics.com/ngpro/swath-ms.html</a></li>
+<li>Thermo Fisher Scientific - LSMS, <a href="https://github.com/thermofisherlsms" class="uri">https://github.com/thermofisherlsms</a></li>
+<li>UCSC, <a href="https://genome.ucsc.edu/" class="uri">https://genome.ucsc.edu/</a></li>
+</ul>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<p>The <code>EndNote/</code> directory includes references in<span class="citation"><sup>1</sup></span> and<span class="citation"><sup>4</sup></span> formatted in EndNote.</p>
+<div id="refs" class="references csl-bib-body" line-spacing="2">
+<div id="ref-sun18" class="csl-entry">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Sun, B. B. <em>et al.</em> <a href="https://doi.org/10.1038/s41586-018-0175-2">Genomic atlas of the human plasma proteome</a>. <em>Nature</em> <strong>558</strong>, 73–79 (2018).</div>
+</div>
+<div id="ref-zhao23" class="csl-entry">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Zhao, J. H. <em>et al.</em> <a href="https://doi.org/10.1038/s41590-023-01588-w">Genetics of circulating inflammatory proteins identifies drivers of immune-mediated disease risk and therapeutic targets.</a> <em>Nature Immunology</em> <strong>24</strong>, 1540–1551 (2023).</div>
+</div>
+<div id="ref-suhre24" class="csl-entry">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Suhre, K. <em>et al.</em> A genome-wide association study of mass spectrometry proteomics using the seer proteograph platform. <em>BioRxiv</em> (2024) doi:<a href="https://doi.org/10.1101/2024.05.27.596028">10.1101/2024.05.27.596028</a>.</div>
+</div>
+<div id="ref-suhre20" class="csl-entry">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Suhre, K., McCarthy, M. I. &amp; Schwenk, J. M. Genetics meets proteomics: Perspectives for large population-based studies. <em>Nat Rev Genet</em> (2020) doi:<a href="https://doi.org/10.1038/s41576-020-0268-2">10.1038/s41576-020-0268-2</a>.</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
