@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
   fig.path = "pQTLdata/",
   collapse = TRUE,
   comment = "#>",
-  dev = "png")
+  dev = "CairoPNG")
 
 ## ----echo=FALSE, message=FALSE, warning=FALSE---------------------------------
 pkgs <- c("dplyr", "grid", "EnsDb.Hsapiens.v75", "ensembldb", "IRanges", "knitr", "org.Hs.eg.db", "S4Vectors", "VennDiagram")
@@ -14,15 +14,19 @@ for (p in pkgs) if (length(grep(paste("^package:", p, "$", sep=""), search())) =
     if (!requireNamespace(p)) warning(paste0("This vignette needs package `", p, "'; please install"))
 }
 invisible(suppressMessages(lapply(pkgs, require, character.only = TRUE)))
+sys_options <- options(knitr.kable.NA=NULL)
+new_options <- options(knitr.kable.NA='')
 
 ## ----caprion, echo=FALSE------------------------------------------------------
+options(new_options)
 accession_list <- c("P04745", "Q9GZN8", "P0C0L5", "Q96N11", "P48960",
                     "Q9NUQ9", "P04062", "P69905", "P62805", "O14745",
                     "P23381", "P54577")
 updated_list <- dplyr::filter(pQTLdata::caprion,Accession %in% accession_list) |>
                 dplyr::ungroup() |>
                 dplyr::select(Gene,Gene.orig,Protein,Accession,ensGenes,chr,start,end)
-knitr::kable(updated_list,caption="Updated information on Caprion")
+knitr::kable(updated_list,digits=2,caption="Updated information on Caprion")
+options(sys_options)
 
 ## ----overlap1, echo=FALSE, fig.cap="Overlap of Olink Explore HT, SomaScan V4.1 and Caprion", fig.height=9, fig.width=9, messages=FALSE, results="hide"----
 suppressMessages(library(dplyr))
@@ -51,9 +55,12 @@ grid.newpage()
 grid.draw(olink_somascan_caprion)
 
 ## ----inf1, echo=FALSE---------------------------------------------------------
-knitr::kable(pQTLdata::inf1,caption="Olink/inflammation panel")
+options(new_options)
+knitr::kable(pQTLdata::inf1,digits=2,caption="Olink/inflammation panel")
+options(sys_options)
 
-## ----refdata, warnings=FALSE--------------------------------------------------
+## ----refdata, eval=requireNamespace("EnsDb.Hsapiens.v75", quietly=TRUE), warnings=FALSE----
+options(new_options)
 ensembldb::metadata(EnsDb.Hsapiens.v75)
 ensembldb::keytypes(EnsDb.Hsapiens.v75)
 exon_info <- ensembldb::exons(EnsDb.Hsapiens.v75)
@@ -81,4 +88,5 @@ info <- ensembldb::select(EnsDb.Hsapiens.v75, keys = gene_symbols,
 knitr::kable(head(info,15),caption="Annotation for BRCA1 and TP53")
 keytypes(org.Hs.eg.db)
 uniprot_ids <- ensembldb::select(org.Hs.eg.db, keys = gene_symbols, columns = "UNIPROT", keytype = "SYMBOL")
+options(sys_options)
 

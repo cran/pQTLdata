@@ -262,13 +262,13 @@ div.tocify {
 </div>
 
 
-<p>This package intends to gather information, meta-data and relevant scripts in proteogenomic analysis.</p>
+<p>This package intends to gather information, metadata and relevant scripts in proteogenomic analysis.</p>
 <div id="collections" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Collections</h1>
 <p>As used in several years of proteomic analysis and for future extensions, the collections are in two locations:</p>
 <ul>
 <li><strong><code>data/</code></strong>. R datasets.</li>
-<li><strong><code>inst/</code></strong>. <code>EndNote/</code>, <code>Olink/</code>, <code>scripts/</code>, which spread into the package’s root directory after installation.</li>
+<li><strong><code>inst/</code></strong>. <code>EndNote/</code>, <code>Olink/</code>, <code>scripts/</code>, <code>SomaLogic/</code>, which spread into the package’s root directory after installation.</li>
 </ul>
 <p>While <code>library(help=pQTLdata)</code> displays the general information, <code>? pQTLdata</code> can give a list of data objects in the package.</p>
 </div>
@@ -441,12 +441,66 @@ div.tocify {
 <div id="overlap-of-proteins" class="section level2" number="2.5">
 <h2><span class="header-section-number">2.5</span> Overlap of proteins</h2>
 <p>It is of interest to compare some of these,</p>
+<pre><code>#&gt; INFO [2026-03-09 11:37:22] [[1]]
+#&gt; INFO [2026-03-09 11:37:22] uniprot
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $filename
+#&gt; INFO [2026-03-09 11:37:22] NULL
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $disable.logging
+#&gt; INFO [2026-03-09 11:37:22] [1] TRUE
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $cex
+#&gt; INFO [2026-03-09 11:37:22] [1] 2.5
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $cat.cex
+#&gt; INFO [2026-03-09 11:37:22] [1] 2.5
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $cat.pos
+#&gt; INFO [2026-03-09 11:37:22] c(0, 0, 180)
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $height
+#&gt; INFO [2026-03-09 11:37:22] [1] 8
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $width
+#&gt; INFO [2026-03-09 11:37:22] [1] 8
+#&gt; INFO [2026-03-09 11:37:22] 
+#&gt; INFO [2026-03-09 11:37:22] $units
+#&gt; INFO [2026-03-09 11:37:22] [1] &quot;in&quot;
+#&gt; INFO [2026-03-09 11:37:22]</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:overlap1"></span>
 <img src="pQTLdata/overlap1-1.png" alt="Overlap of Olink Explore HT, SomaScan V4.1 and Caprion" width="864" style="display:block; margin: auto" />
 <p class="caption">
 Figure 2.1: Overlap of Olink Explore HT, SomaScan V4.1 and Caprion
 </p>
 </div>
+<pre><code>#&gt; INFO [2026-03-09 11:37:26] [[1]]
+#&gt; INFO [2026-03-09 11:37:26] uniprot
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $filename
+#&gt; INFO [2026-03-09 11:37:26] NULL
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $disable.logging
+#&gt; INFO [2026-03-09 11:37:26] [1] TRUE
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $cex
+#&gt; INFO [2026-03-09 11:37:26] [1] 2.5
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $cat.cex
+#&gt; INFO [2026-03-09 11:37:26] [1] 2.5
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $cat.pos
+#&gt; INFO [2026-03-09 11:37:26] c(0, 0, 180)
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $height
+#&gt; INFO [2026-03-09 11:37:26] [1] 8
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $width
+#&gt; INFO [2026-03-09 11:37:26] [1] 8
+#&gt; INFO [2026-03-09 11:37:26] 
+#&gt; INFO [2026-03-09 11:37:26] $units
+#&gt; INFO [2026-03-09 11:37:26] [1] &quot;in&quot;
+#&gt; INFO [2026-03-09 11:37:26]</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:overlap2"></span>
 <img src="pQTLdata/overlap2-1.png" alt="Overlap of Olink Explore HT, SomaScan 11K and Caprion" width="864" style="display:block; margin: auto" />
 <p class="caption">
@@ -1974,7 +2028,8 @@ Figure 2.2: Overlap of Olink Explore HT, SomaScan 11K and Caprion
 <div id="reference-data" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Reference data</h1>
 <p>We showcase <code>EnsDb.Hsapiens.v75</code> from Bioconductor.</p>
-<pre class="r"><code>ensembldb::metadata(EnsDb.Hsapiens.v75)
+<pre class="r"><code>options(new_options)
+ensembldb::metadata(EnsDb.Hsapiens.v75)
 #&gt;                  name                               value
 #&gt; 1             Db type                               EnsDb
 #&gt; 2     Type of Gene ID                     Ensembl Gene ID
@@ -2241,7 +2296,8 @@ knitr::kable(head(info,15),caption=&quot;Annotation for BRCA1 and TP53&quot;)</c
 #&gt; [21] &quot;PMID&quot;         &quot;PROSITE&quot;      &quot;REFSEQ&quot;       &quot;SYMBOL&quot;       &quot;UCSCKG&quot;      
 #&gt; [26] &quot;UNIPROT&quot;
 uniprot_ids &lt;- ensembldb::select(org.Hs.eg.db, keys = gene_symbols, columns = &quot;UNIPROT&quot;, keytype = &quot;SYMBOL&quot;)
-#&gt; &#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
+#&gt; &#39;select()&#39; returned 1:many mapping between keys and columns
+options(sys_options)</code></pre>
 <p>where <code>org.Hs.eg.db</code> is more focused on genes.</p>
 </div>
 <div id="scripts" class="section level1" number="5">
@@ -2278,10 +2334,10 @@ Specifically, <code>docs.sh</code> operates with GitHub while <code>cran.sh</cod
 <div class="csl-left-margin">2. </div><div class="csl-right-inline">Zhao, J. H. <em>et al.</em> <a href="https://doi.org/10.1038/s41590-023-01588-w">Genetics of circulating inflammatory proteins identifies drivers of immune-mediated disease risk and therapeutic targets.</a> <em>Nature Immunology</em> <strong>24</strong>, 1540–1551 (2023).</div>
 </div>
 <div id="ref-suhre24" class="csl-entry">
-<div class="csl-left-margin">3. </div><div class="csl-right-inline">Suhre, K. <em>et al.</em> A genome-wide association study of mass spectrometry proteomics using the seer proteograph platform. <em>BioRxiv</em> (2024) doi:<a href="https://doi.org/10.1101/2024.05.27.596028">10.1101/2024.05.27.596028</a>.</div>
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Suhre, K. <em>et al.</em> A genome-wide association study of mass spectrometry proteomics using the seer proteograph platform. <em>BioRxiv</em> <a href="https://doi.org/10.1101/2024.05.27.596028">https://doi.org/10.1101/2024.05.27.596028</a> (2024) doi:<a href="https://doi.org/10.1101/2024.05.27.596028">10.1101/2024.05.27.596028</a>.</div>
 </div>
 <div id="ref-suhre20" class="csl-entry">
-<div class="csl-left-margin">4. </div><div class="csl-right-inline">Suhre, K., McCarthy, M. I. &amp; Schwenk, J. M. Genetics meets proteomics: Perspectives for large population-based studies. <em>Nat Rev Genet</em> (2020) doi:<a href="https://doi.org/10.1038/s41576-020-0268-2">10.1038/s41576-020-0268-2</a>.</div>
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Suhre, K., McCarthy, M. I. &amp; Schwenk, J. M. Genetics meets proteomics: Perspectives for large population-based studies. <em>Nat Rev Genet</em> <a href="https://doi.org/10.1038/s41576-020-0268-2">https://doi.org/10.1038/s41576-020-0268-2</a> (2020) doi:<a href="https://doi.org/10.1038/s41576-020-0268-2">10.1038/s41576-020-0268-2</a>.</div>
 </div>
 </div>
 </div>
